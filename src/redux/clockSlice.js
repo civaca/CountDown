@@ -1,16 +1,77 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+
 export const clockSlice= createSlice({
     name:"clocks",
     initialState:{
-        display:1
+        display:{
+            minitus:25,
+            secon:0
+        },
+        breack:{
+            minitus:5,
+            secon:0
+        },
+        session:{
+            minitus:25,
+            secon:0
+        }
     },
     reducers:{
         addDisplay:(state) =>{
-            state.display+=1;
+            if (state.display.secon=="00"){
+                state.display.secon=59;
+                state.display.minitus-=1;
+                
+                
+            } else{
+                state.display.secon-=1;
+            } 
+            
+            
+            
         },
+        changeSession:(state)=>{
+            if(state.display.minitus!==state.session){
+                state.display.minitus=state.session.minitus;
+                state.display.secon="00"
+            }
+        },
+        addSeLength:(state)=>{
+            if(state.session.minitus<60){
+            state.session.minitus+=1;
+            state.session.secon="00"}
+        },
+        restSeLength:(state)=>{
+            if(state.session.minitus>1){
+            state.session.minitus-=1;}
+        },
+        addBrLength:(state)=>{
+            if(state.breack.minitus<60){
+            state.breack.minitus+=1;
+            state.breack.secon="00"
+        }
+        },
+        restBrLength:(state)=>{
+            if(state.breack.minitus>1){
+            state.breack.minitus-=1;
+            state.breack.secon="00"
+        }
+        },
+        restart:(state)=>{
+            state.display.minitus=25;
+            state.display.secon=0;
+            state.breack.minitus=5;
+            state.breack.secon=0;
+            state.session.minitus=25;
+            state.session.secon=0;
+
+        }
+
+        
     }
 });
 
-export const { addDisplay }= clockSlice.actions;
+export const { addDisplay, changeSession, addSeLength,restSeLength,addBrLength,restBrLength, restart }= clockSlice.actions;
 export default clockSlice.reducer
