@@ -18,7 +18,14 @@ function App() {
   
 
 
+if(value.minitus==0 && value.secon==0){
+  clearInterval(id.current)
+  console.log("yes",value.secon)
+}
+
   let add=()=>{
+    
+   
 
     if(startStop.current){
       clearInterval(id.current)
@@ -32,42 +39,38 @@ function App() {
     
   }
    
-  
-    
+
  
 
   }
  
   let stop1=()=>{
     clearInterval(id.current)
-    startStop.current=!startStop.current;
+    if(startStop.current==false){
+    startStop.current=!startStop.current;}
     dispatch(restart())
   
   }
   
 
   let addSl=()=>{
-    clearInterval(id.current)
-    startStop.current=!startStop.current;
+    if(startStop.current){
     dispatch(addSeLength());
-    dispatch(changeSession())
+    dispatch(changeSession())}
   }
   let addRl=()=>{
-    clearInterval(id.current)
-    startStop.current=!startStop.current;
+      if(startStop.current) {
     dispatch(restSeLength());
-    dispatch(changeSession())
+    dispatch(changeSession())}
   }
   
   let addBre=()=>{
-    clearInterval(id.current)
-    startStop.current=!startStop.current;
-    dispatch(addBrLength());
+    if(startStop.current) {
+    dispatch(addBrLength());}
   }
   let resBre=()=>{
-    clearInterval(id.current)
-    startStop.current=!startStop.current;
-    dispatch(restBrLength());
+    if(startStop.current) {
+    dispatch(restBrLength());}
   }
   
   
@@ -77,20 +80,20 @@ function App() {
       <h1>Hello </h1>
       <div id="break-label">
         <h2>Breack Length</h2>
-        <span><p id="break-length">{breaks.minitus}</p><p>:{breaks.secon}</p></span>
+        <span class="dis"><p id="break-length">{breaks.minitus}</p><p>:{breaks.secon}</p></span>
         <button onClick={resBre} id="break-decrement">Bread drecrement</button>
         <button onClick={addBre} id="break-increment">Break increment</button>
       </div>
       <div id="session-label">
         <h2>Session Length</h2>
-        <span><p id="session-length">{sessionTime.minitus}</p><p>:{sessionTime.secon}</p></span>
+        <span class="dis"><p id="session-length">{sessionTime.minitus}</p><p>:{sessionTime.secon}</p></span>
         <button onClick={addRl} id="session-decrement">Session drecrement</button>
         <button onClick={addSl} id="session-increment">Session increment</button>
       </div>
       <div>
         <h1 id="timer-label">Session</h1>
-        <span><h1 >{value.minitus}</h1><h1>:{value.secon}</h1></span>
-        <button id="start_stop"onClick={add}>Subir</button>
+        <h1 class="dis" id="time-left" >{value.minitus.toString().padStart(2,"0")}:{value.secon.toString().padStart(2,"0")}</h1>
+        <button id="start_stop"onClick={add}>Start</button>
         <button id="reset" onClick={stop1}>Reset</button>
         </div>
     </div>

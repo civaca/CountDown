@@ -20,14 +20,17 @@ export const clockSlice= createSlice({
     },
     reducers:{
         addDisplay:(state) =>{
-            if (state.display.secon=="00"){
+
+            
+            if (state.display.secon==0){
                 state.display.secon=59;
-                state.display.minitus-=1;
-                
-                
+                state.display.minitus-=1;   
             } else{
                 state.display.secon-=1;
             } 
+            {
+
+            }
             
             
             
@@ -35,13 +38,13 @@ export const clockSlice= createSlice({
         changeSession:(state)=>{
             if(state.display.minitus!==state.session){
                 state.display.minitus=state.session.minitus;
-                state.display.secon="00"
+                state.display.secon=0
             }
         },
         addSeLength:(state)=>{
             if(state.session.minitus<60){
             state.session.minitus+=1;
-            state.session.secon="00"}
+            state.session.secon=0}
         },
         restSeLength:(state)=>{
             if(state.session.minitus>1){
@@ -50,13 +53,13 @@ export const clockSlice= createSlice({
         addBrLength:(state)=>{
             if(state.breack.minitus<60){
             state.breack.minitus+=1;
-            state.breack.secon="00"
+            state.breack.secon=0
         }
         },
         restBrLength:(state)=>{
             if(state.breack.minitus>1){
             state.breack.minitus-=1;
-            state.breack.secon="00"
+            state.breack.secon=0
         }
         },
         restart:(state)=>{
