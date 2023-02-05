@@ -17,8 +17,7 @@ export const clockSlice= createSlice({
         session:{
             minitus:25,
             secon:0
-        },
-        stringDisplay:'Session',
+        }
       
     },
     reducers:{
@@ -33,10 +32,10 @@ export const clockSlice= createSlice({
                
         },
         changeSession:(state)=>{
-            if(state.display.minitus!==state.session.minitus){
+            
                 state.display.minitus=state.session.minitus;
                 state.display.secon=0
-            }
+            
         },
         addSeLength:(state)=>{
             if(state.session.minitus<60){
@@ -52,10 +51,7 @@ export const clockSlice= createSlice({
             state.breack.minitus+=1;
             state.breack.secon=0
         }
-            if(state.display.minitus!==state.breack.minitus && state.stringDisplay=="Breack"){
-                state.display.minitus=state.breack.minitus;
-                state.display.secon=0
-            }
+            
 
         },
         restBrLength:(state)=>{
@@ -63,10 +59,7 @@ export const clockSlice= createSlice({
             state.breack.minitus-=1;
             state.breack.secon=0
         }
-        if(state.display.minitus!==state.breack.minitus && state.stringDisplay=="Breack"){
-            state.display.minitus=state.breack.minitus;
-            state.display.secon=0
-        }
+      
         },
         restart:(state)=>{
             state.display.minitus=25;
@@ -79,25 +72,25 @@ export const clockSlice= createSlice({
 
         },
         reachesZero:(state)=>{
-            state.display.minitus=state.breack.minitus;
             
-            
-            
+                state.display.minitus=state.breack.minitus;
+                state.display.secon=0;
+              
            
         },
         reachesZeroBreacks:(state)=>{
-            state.display.minitus=state.session.minitus;
+
            
-            
+                state.display.minitus=state.session.minitus;
+                state.display.secon=0;
+                
+    
         },
-        changeString:(state)=>{
+            
+        changeDisplayBreacks:(state)=>{
            
-            state.display.string="Breack";   
-            
-        
-        },
-        changeStringBreack:(state)=>{
-            state.display.string="Session";
+                state.display.minitus=state.breack.minitus;
+                state.display.secon=0
             
         }
                
@@ -105,5 +98,5 @@ export const clockSlice= createSlice({
 });
 
 export const { addDisplay, changeSession, addSeLength,restSeLength,addBrLength,restBrLength, restart, reachesZero, reachesZeroBreacks,
-     changeString, changeStringBreack}= clockSlice.actions;
+     changeString, changeStringBreack, changeDisplayBreacks}= clockSlice.actions;
 export default clockSlice.reducer

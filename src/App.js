@@ -1,25 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useRef, useEffect, useState} from 'react';
 import { addDisplay, addSeLength,changeSession,restSeLength,addBrLength,restBrLength, restart,
-  reachesZero, reachesZeroBreacks, changeString, changeStringBreack} from './redux/clockSlice';
+  reachesZero, reachesZeroBreacks, changeDisplayBreacks} from './redux/clockSlice';
 
 
 
 function App() {
+// new states values
   const dispatch=useDispatch();
   const value=useSelector((state)=>state.clock.display);
   const breaks=useSelector((state)=>state.clock.breack);
   const sessionTime=useSelector((state)=>state.clock.session)
-  const titleDisplay=useSelector((state)=>state.clock.stringDisplay)
-
+// constants values for set interval y display
    const id=useRef()
    const startStop=useRef()
    const strings=useRef()
   
-
+// first render
   useEffect(()=>{
   startStop.current=true;
  strings.current="Session"
@@ -27,143 +26,133 @@ function App() {
   } ,[])
 
 
-
-
-
+  
 
 //Stoper when timer reaches zeros
-
-
-
-if(value.minitus==0 && value.secon==0 && strings.current=="Session"){
-  clearInterval(id.current);
-  document.getElementById("beep").play()
-  document.getElementById("timer-label").innerText="Breacks"
-setTimeout(()=>{
- 
-   
-   dispatch(reachesZero());
-  
-   strings.current="Breacks";
-   
-  
-    }, 1000 )
-    id.current=setInterval(()=>dispatch(addDisplay()),1000);
-    }
-
-
-// Breacks reaches zero
-
-
-if(value.minitus==0 && value.secon==0 && strings.current=="Breacks"){
-  clearInterval(id.current);
-  document.getElementById("timer-label").innerText="Session";
-
-  setTimeout(()=>{
-    clearInterval(id.current);
-    dispatch(reachesZeroBreacks());
-   
-    strings.current="Session";
-    id.current=setInterval(()=>dispatch(addDisplay()),1000);
-
-    },1000)
-
-    
+if(value.minitus==0 && value.secon==1){
+  setTimeout(()=>document.getElementById("beep").play(),1000)
 }
 
+if (value.minitus==0 && value.secon==0 && strings.current=="Session"){
+document.getElementById("timer-label").innerText="Break";
 
+clearInterval(id.current)
+ setTimeout(()=>{dispatch(reachesZero());
+    strings.current="Break"
+    clearInterval(id.current);
+    id.current=setInterval(()=>dispatch(addDisplay()),1000);
+  },1000)
 
+ 
+}
 
+if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
+  document.getElementById("timer-label").innerText="Break"; 
+  
+  clearInterval(id.current);
+    setTimeout(()=>{dispatch(reachesZeroBreacks());
+      strings.current="Session"
+      clearInterval(id.current);
+    id.current=setInterval(()=>addDisplay(),1000);
+    },1000)
+    
+  }
+  
 // Timer starts
 let add=()=>{
-
-
   if(startStop.current){
     clearInterval(id.current);
-    setTimeout(()=>{dispatch(addDisplay());
-      id.current=setInterval(()=>dispatch(addDisplay()),1000);
-      startStop.current=!startStop.current;
-    },1000) 
-
+    startStop.current=!startStop.current;
+    id.current=setInterval(()=>dispatch(addDisplay()),   1000);
    
-    
-
-  console.log(startStop.current, id.current)
   } else{
   clearInterval(id.current)
  startStop.current=!startStop.current;
-  console.log(startStop.current)
-
   }
  }
 
  //Functions of buttons
 
   let stop1=()=>{
-
-
+    clearInterval(id.current)
     if(startStop==false){
       startStop.current=!startStop.current;}
       dispatch(restart())
-      clearInterval(id.current)
+      
       document.getElementById("timer-label").innerText="Session";
       strings.current="Session"
-
-
-
-
-  }
-
+      document.getElementById("beep").load()
+    }
 
   let addSl=()=>{
     if(startStop.current){
     dispatch(addSeLength());
-    dispatch(changeSession())}
+    if(strings.current=="Session"){
+      dispatch(changeSession())
+    
+    }}
   }
   let addRl=()=>{
       if(startStop.current) {
     dispatch(restSeLength());
-    dispatch(changeSession())}
+    if(strings.current=="Session"){
+      dispatch(changeSession()); }}
   }
 
   let addBre=()=>{
     if(startStop.current) {
-    dispatch(addBrLength());}
+    dispatch(addBrLength());
+    if (strings.current=="Break"){
+      dispatch(changeDisplayBreacks())
+    }
+  
   }
+  
+  
+}
   let resBre=()=>{
     if(startStop.current) {
-    dispatch(restBrLength());}
+    dispatch(restBrLength());
+    if (strings.current=="Break"){
+      dispatch(changeDisplayBreacks())
+    }
+  
   }
+
+    
+  }
+
 
 
 
 
   return (
     <div className="App">
-      <h1>Hello </h1>
-      <div id="break-label">
+      <h1 id="titlemain">25 + 5 Clock</h1>
+      <div id="break-label" className="dis">
         <h2>Breack Length</h2>
-        <span className="dis"><p id="break-length">{breaks.minitus}</p></span>
-        <button onClick={resBre} id="break-decrement">Bread drecrement</button>
-        <button onClick={addBre} id="break-increment">Break increment</button>
+        <span ><h3 id="break-length">{breaks.minitus}</h3></span>
+        <button className="btn btn-primary"onClick={resBre} id="break-decrement">-</button>
+        <button className="btn btn-primary" onClick={addBre} id="break-increment">+</button>
       </div>
-      <div id="session-label">
+      <div id="session-label" className="dis">
         <h2>Session Length</h2>
-        <span className="dis"><p id="session-length">{sessionTime.minitus}</p></span>
-        <button onClick={addRl} id="session-decrement">Session drecrement</button>
-        <button onClick={addSl} id="session-increment">Session increment</button>
+        <span ><h3 id="session-length">{sessionTime.minitus}</h3></span>
+        <button className="btn btn-primary" onClick={addRl} id="session-decrement">-</button>
+        <button className="btn btn-primary" onClick={addSl} id="session-increment">+</button>
       </div>
-      <div>
-       <span> <h1 id="timer-label"></h1>
-        <h1 className="dis" id="time-left" >{+value.minitus.toString().padStart(2,"0")+":"+value.secon.toString().padStart(2,"0")}</h1></span>
-        <button id="start_stop"onClick={add}>Start</button>
-        <button id="reset" onClick={stop1}>Reset</button>
+      <div className="display">
+       <h1 id="timer-label">{strings.current}</h1>
+        <h1  id="time-left" >{value.minitus.toString().padStart(2,"0")+":"+value.secon.toString().padStart(2,"0")}</h1></div>
+       <div className="display">
+        <button className="btn btn-info" id="start_stop"onClick={add}>Start</button>
+        <button className="btn btn-info" id="reset" onClick={stop1}>Reset</button>
          <audio src='beep.wav' id='beep'/>
 
 
 
         </div>
-
+        
     </div>
   );
 }
