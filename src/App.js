@@ -86,7 +86,7 @@ let add=()=>{
     }
 // +- session
   let addSl=()=>{
-    if(sessionTime.minitus<60){
+    if(sessionTime.minitus<60 && startStop==true){
     dispatch(addSeLength());
     if( document.getElementById("timer-label").innerText=="Session" ){
       dispatch(changeSession())
@@ -96,7 +96,7 @@ let add=()=>{
 
   }
   let addRl=()=>{
-      if(sessionTime.minitus>1) {
+      if(sessionTime.minitus>1 && startStop==true) {
     dispatch(restSeLength());
     if(document.getElementById("timer-label").innerText=="Session" ){
       dispatch(changeSession()); }}
@@ -105,7 +105,7 @@ let add=()=>{
   }
 //+- breaks
   let addBre=()=>{
-    if(breaks.minitus<60) {
+    if(breaks.minitus<60 && startStop==true) {
     dispatch(addBrLength());
     if (document.getElementById("timer-label").innerText=="Break" ){
       dispatch(changeDisplayBreacks())
@@ -115,7 +115,7 @@ let add=()=>{
   
 }
   let resBre=()=>{
-    if(breaks.minitus>1) {
+    if(breaks.minitus>1 && startStop==true) {
     dispatch(restBrLength());
     if (document.getElementById("timer-label").innerText=="Break"){
       dispatch(changeDisplayBreacks())
