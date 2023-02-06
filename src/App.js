@@ -29,31 +29,37 @@ function App() {
   
 
 //Stoper when timer reaches zeros
-if(value.minitus==0 && value.secon==1){
- document.getElementById("beep").load()
+if(value.minitus==0 && value.secon==0){
+
+ document.getElementById("beep").play()
+
 }
-
+//Countdown Session
 if (value.minitus==0 && value.secon==0 && strings.current=="Session"){
-
-document.getElementById("beep").play()
+  document.getElementById("timer-label").innerText="Break"
 
 clearInterval(id.current)
  setTimeout(()=>{dispatch(reachesZero());
+  
+
     strings.current="Break"
+   
     clearInterval(id.current);
     id.current=setInterval(()=>dispatch(addDisplay()),1000);
   },1000)
 
  
 }
-
+//Countdown Breack
 if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
 
-  document.getElementById("beep").play()
+  document.getElementById("timer-label").innerText="Session"
 
   clearInterval(id.current);
     setTimeout(()=>{dispatch(reachesZeroBreacks());
-      strings.current="Session"
+    
+      strings.current="Session";
+      
       clearInterval(id.current);
     id.current=setInterval(dispatch(()=>addDisplay(),1000));
     },1000)
@@ -62,19 +68,15 @@ if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
   
 // Timer starts
 let add=()=>{
+  clearInterval(id.current);
   if(startStop.current){
-    setTimeout(()=>{
-      clearInterval(id.current);
-      startStop.current=!startStop.current;
-      dispatch(addDisplay());
-      id.current=setInterval(()=>dispatch(addDisplay()),   1000);
+    clearInterval(id.current);
+    id.current=setInterval(()=>dispatch(addDisplay()),   1000);
+    startStop.current=!startStop.current;
 
-    },1000)
-    
    
   } else{
-  clearInterval(id.current)
- startStop.current=!startStop.current;
+ startStop.current=true;
   }
  }
 
@@ -90,7 +92,7 @@ let add=()=>{
       strings.current="Session"
       document.getElementById("beep").load()
     }
-
+// +- session
   let addSl=()=>{
     if(sessionTime.minitus<60){
     dispatch(addSeLength());
@@ -98,9 +100,7 @@ let add=()=>{
       dispatch(changeSession())
     
     }}
-    // dispatch(addSeLength());
-    // if( document.getElementById("timer-label").innerText=="Session" ){
-    //     dispatch(changeSession())}
+    
 
   }
   let addRl=()=>{
@@ -108,13 +108,10 @@ let add=()=>{
     dispatch(restSeLength());
     if(document.getElementById("timer-label").innerText=="Session" ){
       dispatch(changeSession()); }}
-      // dispatch(restSeLength());
-      // if(document.getElementById("timer-label").innerText=="Session" ){
-      //   dispatch(changeSession()); }
-
+    
 
   }
-
+//+- breaks
   let addBre=()=>{
     if(breaks.minitus<60) {
     dispatch(addBrLength());
@@ -123,7 +120,6 @@ let add=()=>{
     }
   
   }
-  
   
 }
   let resBre=()=>{
@@ -135,12 +131,7 @@ let add=()=>{
   
   }
 
-    
   }
-
-
-
-
 
   return (
     <div className="App">
@@ -162,7 +153,7 @@ let add=()=>{
         </span>
       </div>
       <div className="display">
-       <h1 id="timer-label">{strings.current}</h1>
+       <h1 id="timer-label"></h1>
         <h1  id="time-left" >{value.minitus.toString().padStart(2,"0")+":"+value.secon.toString().padStart(2,"0")}</h1></div>
        <div className="display">
         <button className="btn btn-info" id="start_stop"onClick={add}>Start</button>
