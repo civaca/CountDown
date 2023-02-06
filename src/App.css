@@ -1,5 +1,6 @@
 .App {
  margin: 2%;
+ text-align: center;
 
 }
 body{
@@ -18,6 +19,7 @@ body{
 }
 #titlemain{
  text-align: center; 
+ font-weight: 800;
 }
 .length{
   display: flex;
@@ -28,4 +30,16 @@ body{
 button{
   width:100px;
   font-size: xx-large;
+}
+@media  only screen and (max-width:680px) {
+  .dis{
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 2rem auto;
+  }
+  #titlemain{
+    margin-top: 3rem;
+  }
+  
 }

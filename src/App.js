@@ -6,7 +6,6 @@ import { addDisplay, addSeLength,changeSession,restSeLength,addBrLength,restBrLe
   reachesZero, reachesZeroBreacks, changeDisplayBreacks} from './redux/clockSlice';
 
 
-
 function App() {
 // new states values
   const dispatch=useDispatch();
@@ -15,66 +14,62 @@ function App() {
   const sessionTime=useSelector((state)=>state.clock.session)
 // constants values for set interval y display
    const id=useRef()
-   const startStop=useRef()
+   const [startStop,setStart]=useState(true);
+   //true:NOt running
+  //false:running
    const strings=useRef()
+  const audio= document.getElementById("beep")
   
 // first render
   useEffect(()=>{
-  startStop.current=true;
- strings.current="Session"
- document.getElementById("timer-label").innerText="Session"
+  strings.current="Session"
+ document.getElementById("timer-label").innerHTML="Session"
   } ,[])
-
-
   
+  //Sound
+  if (value.minitus==0 && value.secon==0){
+      audio.play()
+     }
 
 //Stoper when timer reaches zeros
-if (value.minitus==0 && value.secon==0){
-  document.getElementById("beep").play()
-}
-
+useEffect(()=>{
 //Countdown Session
-if (value.minitus==0 && value.secon==0 && strings.current=="Session"){
-  document.getElementById("timer-label").innerText="Break"
-clearInterval(id.current)
- setTimeout(()=>{dispatch(reachesZero());
-    
-    strings.current="Break"
-   
-    clearInterval(id.current);
-    id.current=setInterval(()=>dispatch(addDisplay()),1000);
-  },1000)
-
- 
-}
-//Countdown Breack
-if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
-
-
-
-
-  clearInterval(id.current);
-    setTimeout(()=>{dispatch(reachesZeroBreacks());
-      document.getElementById("timer-label").innerText="Session"
-    
-      strings.current="Session";
-      
+if (value.minitus==0 && value.secon==0 && strings.current=="Session" ){
+ clearInterval(id.current)
+  setTimeout(()=>{if(startStop==false){
+    dispatch(reachesZero());
+        strings.current="Break"
       clearInterval(id.current);
-    id.current=setInterval(dispatch(()=>addDisplay(),1000));
+      id.current=setInterval(()=>dispatch(addDisplay()),1000);}
     },1000)
-    
+  
+  
   }
+  //Countdown Breack
+  if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
+    clearInterval(id.current);
+      setTimeout(()=>{dispatch(reachesZeroBreacks());
+        strings.current="Session";
+        clearInterval(id.current);
+      id.current=setInterval(dispatch(()=>addDisplay(),1000));
+      },1000)
+      
+    }
+})
+
   
 // Timer starts
 let add=()=>{
-  clearInterval(id.current);
-  if(startStop.current){
+
+  if(startStop){
+    clearInterval(id.current);
     id.current=setInterval(()=>dispatch(addDisplay()),   1000);
-    startStop.current=!startStop.current;
-   
+    setStart(false)
   } else{
- startStop.current=true;
-  }
+    clearInterval(id.current);
+    setStart(true)
+
+  }  
  }
 
  //Functions of buttons
@@ -82,7 +77,7 @@ let add=()=>{
   let stop1=()=>{
     clearInterval(id.current)
     if(startStop==false){
-      startStop.current=!startStop.current;}
+      setStart(true)}
       dispatch(restart())
       
       document.getElementById("timer-label").innerText="Session";
@@ -150,7 +145,7 @@ let add=()=>{
         </span>
       </div>
       <div className="display">
-       <h1 id="timer-label"></h1>
+       <h1 id="timer-label">{strings.current}</h1>
         <h1  id="time-left" >{value.minitus.toString().padStart(2,"0")+":"+value.secon.toString().padStart(2,"0")}</h1></div>
        <div className="display">
         <button className="btn btn-info" id="start_stop"onClick={add}>Start</button>

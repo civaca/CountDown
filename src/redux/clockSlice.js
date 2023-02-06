@@ -8,7 +8,6 @@ export const clockSlice= createSlice({
         display:{
             minitus:25,
             secon:0,
-            string:"Session"
         },
         breack:{
             minitus:5,
@@ -35,10 +34,6 @@ export const clockSlice= createSlice({
            
                     state.display.minitus=state.session.minitus;
                     state.display.secon=0
-
-                
-              
-            
         },
         addSeLength:(state)=>{
             if(state.session.minitus<60){
@@ -78,6 +73,7 @@ export const clockSlice= createSlice({
             
                 state.display.minitus=state.breack.minitus;
                 state.display.secon=0;
+                state.display.string="Break"
               
            
         },
