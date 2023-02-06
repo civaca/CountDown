@@ -30,11 +30,12 @@ function App() {
 
 //Stoper when timer reaches zeros
 if(value.minitus==0 && value.secon==1){
-  setTimeout(()=>document.getElementById("beep").play(),1000)
+ document.getElementById("beep").load()
 }
 
 if (value.minitus==0 && value.secon==0 && strings.current=="Session"){
-document.getElementById("timer-label").innerText="Break";
+
+document.getElementById("beep").play()
 
 clearInterval(id.current)
  setTimeout(()=>{dispatch(reachesZero());
@@ -47,13 +48,14 @@ clearInterval(id.current)
 }
 
 if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
-  document.getElementById("timer-label").innerText="Break"; 
-  
+
+  document.getElementById("beep").play()
+
   clearInterval(id.current);
     setTimeout(()=>{dispatch(reachesZeroBreacks());
       strings.current="Session"
       clearInterval(id.current);
-    id.current=setInterval(()=>addDisplay(),1000);
+    id.current=setInterval(dispatch(()=>addDisplay(),1000));
     },1000)
     
   }
@@ -61,9 +63,14 @@ if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
 // Timer starts
 let add=()=>{
   if(startStop.current){
-    clearInterval(id.current);
-    startStop.current=!startStop.current;
-    id.current=setInterval(()=>dispatch(addDisplay()),   1000);
+    setTimeout(()=>{
+      clearInterval(id.current);
+      startStop.current=!startStop.current;
+      dispatch(addDisplay());
+      id.current=setInterval(()=>dispatch(addDisplay()),   1000);
+
+    },1000)
+    
    
   } else{
   clearInterval(id.current)
@@ -85,24 +92,33 @@ let add=()=>{
     }
 
   let addSl=()=>{
-    if(startStop.current){
+    if(sessionTime.minitus<60){
     dispatch(addSeLength());
-    if(strings.current=="Session"){
+    if( document.getElementById("timer-label").innerText=="Session" ){
       dispatch(changeSession())
     
     }}
+    // dispatch(addSeLength());
+    // if( document.getElementById("timer-label").innerText=="Session" ){
+    //     dispatch(changeSession())}
+
   }
   let addRl=()=>{
-      if(startStop.current) {
+      if(sessionTime.minitus>1) {
     dispatch(restSeLength());
-    if(strings.current=="Session"){
+    if(document.getElementById("timer-label").innerText=="Session" ){
       dispatch(changeSession()); }}
+      // dispatch(restSeLength());
+      // if(document.getElementById("timer-label").innerText=="Session" ){
+      //   dispatch(changeSession()); }
+
+
   }
 
   let addBre=()=>{
-    if(startStop.current) {
+    if(breaks.minitus<60) {
     dispatch(addBrLength());
-    if (strings.current=="Break"){
+    if (document.getElementById("timer-label").innerText=="Break" ){
       dispatch(changeDisplayBreacks())
     }
   
@@ -111,9 +127,9 @@ let add=()=>{
   
 }
   let resBre=()=>{
-    if(startStop.current) {
+    if(breaks.minitus>1) {
     dispatch(restBrLength());
-    if (strings.current=="Break"){
+    if (document.getElementById("timer-label").innerText=="Break"){
       dispatch(changeDisplayBreacks())
     }
   
@@ -129,17 +145,21 @@ let add=()=>{
   return (
     <div className="App">
       <h1 id="titlemain">25 + 5 Clock</h1>
-      <div id="break-label" className="dis">
-        <h2>Breack Length</h2>
+      <div className="dis">
+        <h2 id="break-label" >Breack Length</h2>
         <span ><h3 id="break-length">{breaks.minitus}</h3></span>
+        <span className="length">
         <button className="btn btn-primary"onClick={resBre} id="break-decrement">-</button>
         <button className="btn btn-primary" onClick={addBre} id="break-increment">+</button>
+        </span>
       </div>
-      <div id="session-label" className="dis">
-        <h2>Session Length</h2>
+      <div className="dis">
+        <h2  id="session-label">Session Length</h2>
         <span ><h3 id="session-length">{sessionTime.minitus}</h3></span>
+        <span  className="length">
         <button className="btn btn-primary" onClick={addRl} id="session-decrement">-</button>
         <button className="btn btn-primary" onClick={addSl} id="session-increment">+</button>
+        </span>
       </div>
       <div className="display">
        <h1 id="timer-label">{strings.current}</h1>

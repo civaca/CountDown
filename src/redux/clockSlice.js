@@ -32,9 +32,12 @@ export const clockSlice= createSlice({
                
         },
         changeSession:(state)=>{
-            
-                state.display.minitus=state.session.minitus;
-                state.display.secon=0
+           
+                    state.display.minitus=state.session.minitus;
+                    state.display.secon=0
+
+                
+              
             
         },
         addSeLength:(state)=>{
