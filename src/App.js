@@ -29,19 +29,16 @@ function App() {
   
 
 //Stoper when timer reaches zeros
-if(value.minitus==0 && value.secon==0){
-
- document.getElementById("beep").play()
-
+if (value.minitus==0 && value.secon==0){
+  document.getElementById("beep").play()
 }
+
 //Countdown Session
 if (value.minitus==0 && value.secon==0 && strings.current=="Session"){
   document.getElementById("timer-label").innerText="Break"
-
 clearInterval(id.current)
  setTimeout(()=>{dispatch(reachesZero());
-  
-
+    
     strings.current="Break"
    
     clearInterval(id.current);
@@ -53,10 +50,12 @@ clearInterval(id.current)
 //Countdown Breack
 if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
 
-  document.getElementById("timer-label").innerText="Session"
+
+
 
   clearInterval(id.current);
     setTimeout(()=>{dispatch(reachesZeroBreacks());
+      document.getElementById("timer-label").innerText="Session"
     
       strings.current="Session";
       
@@ -70,10 +69,8 @@ if (value.minitus==0 && value.secon==0 && strings.current=="Break"){
 let add=()=>{
   clearInterval(id.current);
   if(startStop.current){
-    clearInterval(id.current);
     id.current=setInterval(()=>dispatch(addDisplay()),   1000);
     startStop.current=!startStop.current;
-
    
   } else{
  startStop.current=true;
@@ -158,11 +155,7 @@ let add=()=>{
        <div className="display">
         <button className="btn btn-info" id="start_stop"onClick={add}>Start</button>
         <button className="btn btn-info" id="reset" onClick={stop1}>Reset</button>
-         <audio src='beep.wav' id='beep'/>
-
-
-
-        </div>
+         </div>
         
     </div>
   );
